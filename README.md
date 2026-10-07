@@ -18,7 +18,16 @@ Els usuaris ja estan creats a la base de dades (com si vinguessin d'una altra BD
 
 ## Instruccions d'ús 📜
 
-* Per a poder entrar es necessités tenir un usuari en la base de dades.
+GitHub Pages no executa PHP; cal provar-lo en local:
+
+1. Instal·la XAMPP (Apache + MySQL) i copia el projecte a `htdocs`.
+2. Importa `sql/bd_dooku - buena.sql` a phpMyAdmin (crea la base de dades `bd_dooku`).
+3. Revisa les credencials a `config/config.php` (per defecte `root` sense contrasenya).
+4. Obre http://localhost/Projecte_01_Reserva_de_taules/ i entra amb un usuari de la taula `tbl_user` (cambrer) o `tbl_man` (manteniment).
+
+## Tecnologies 🛠️
+
+PHP 8 + MySQL (mysqli amb consultes preparades), HTML, CSS i JavaScript (particles.js, SweetAlert).
 
 
 ⌨️ amb ❤️ per [Alejandro Lay](https://github.com/AlejandroLay), [Uíliam Mateu](https://github.com/uiliam11), [Alex Muga](https://github.com/MuGaTy7) 😊

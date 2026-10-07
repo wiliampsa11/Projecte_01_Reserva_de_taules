@@ -240,7 +240,6 @@
 
 </body>
 <!-- Script hamburguesa navbar -->
-<script src="../js/abrirNavbar.js"></script>
 <script src="../js/functions.js"></script>
 
 </html>

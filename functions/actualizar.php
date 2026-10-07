@@ -3,13 +3,13 @@ require "../config/conexion.php";
 session_start();
 
 // Recoger variables tanto de POST como de la SESSION
-$mesa = $_POST['mesa'];
+$mesa = (int) $_POST['mesa'];
 
 if (isset($_POST['Ocupado'])) {
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
     $tel = $_POST['tel'];
-    $capa = $_POST['capa'];
+    $capa = (int) $_POST['capa'];
     $id_user = $_SESSION['id_user'];
 }
 

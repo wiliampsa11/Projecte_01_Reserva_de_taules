@@ -5,13 +5,15 @@ function login($username, $password) {
     session_start();
 
     if (!$conexion) {
-        echo "<script>location.href = '../login.php?errorConexion=true';</script>";
+        echo "<script>location.href = '../index.php?errorConexion=true';</script>";
         die;
     }
 
     // Sentencia para ver si ese usuario que nos han introducido es un camarero
-    $query1 = "SELECT * FROM tbl_user WHERE username = '{$username}' AND password = '{$password}'";
-    $valid_login1 = mysqli_query($conexion, $query1);
+    $stmt1 = mysqli_prepare($conexion, "SELECT * FROM tbl_user WHERE username = ? AND password = ?");
+    mysqli_stmt_bind_param($stmt1, "ss", $username, $password);
+    mysqli_stmt_execute($stmt1);
+    $valid_login1 = mysqli_stmt_get_result($stmt1);
     $match1 = $valid_login1 -> num_rows;
     
     // print_r($match1);
@@ -27,8 +29,10 @@ function login($username, $password) {
     } else {
         
         // Sentencia para ver si ese usuario que nos han introducido es un técnico de mantenimiento
-        $query = "SELECT * FROM tbl_man WHERE username = '{$username}' AND password = '{$password}'";
-        $valid_login = mysqli_query($conexion, $query);
+        $stmt2 = mysqli_prepare($conexion, "SELECT * FROM tbl_man WHERE username = ? AND password = ?");
+        mysqli_stmt_bind_param($stmt2, "ss", $username, $password);
+        mysqli_stmt_execute($stmt2);
+        $valid_login = mysqli_stmt_get_result($stmt2);
         $match = $valid_login -> num_rows;
 
         if ($match === 1) {
@@ -67,9 +71,13 @@ function getReservas($id, $ubi, $client, $ocu) {
     FROM `tbl_mesa` 
     INNER JOIN `tbl_reserva` 
     ON tbl_mesa.id_mesa = tbl_reserva.id_mesa
-    WHERE tbl_mesa.id_mesa LIKE '%".$id."%' AND ubicacion LIKE '%".$ubi."%' AND nom_persona LIKE '%".$client."%' AND capacidad LIKE '%".$ocu."%';";
+    WHERE tbl_mesa.id_mesa LIKE ? AND ubicacion LIKE ? AND nom_persona LIKE ? AND capacidad LIKE ?;";
 
-    $listado_estadisticas = mysqli_fetch_all(mysqli_query($conexion, $sql));
+    $filtros = array_map(fn($v) => '%' . $v . '%', [$id, $ubi, $client, $ocu]);
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "ssss", ...$filtros);
+    mysqli_stmt_execute($stmt);
+    $listado_estadisticas = mysqli_fetch_all(mysqli_stmt_get_result($stmt));
     return $listado_estadisticas;
 }
 
@@ -81,8 +89,12 @@ function getReservasMan($user, $mesa, $ubi) {
     FROM `tbl_mesa` 
     INNER JOIN `tbl_incidencia` 
     ON tbl_mesa.id_mesa = tbl_incidencia.id_mesa_fk
-    WHERE id_mesa LIKE '%".$mesa."%' AND ubicacion LIKE '%".$ubi."%' AND id_user_fk LIKE '%".$user."%';";
-    
-    $listado_estadisticas = mysqli_fetch_all(mysqli_query($conexion, $sql));
+    WHERE id_mesa LIKE ? AND ubicacion LIKE ? AND id_user_fk LIKE ?;";
+
+    $filtros = array_map(fn($v) => '%' . $v . '%', [$mesa, $ubi, $user]);
+    $stmt = mysqli_prepare($conexion, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", ...$filtros);
+    mysqli_stmt_execute($stmt);
+    $listado_estadisticas = mysqli_fetch_all(mysqli_stmt_get_result($stmt));
     return $listado_estadisticas;
 }

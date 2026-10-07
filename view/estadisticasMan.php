@@ -34,7 +34,7 @@
             <ul>
                 <div class="justify-start">
                     <li><a id="volver" href="./man.php"><i class="fa-solid fa-arrow-left"></i></a></li>
-                    <li><p style="color: white;">Bienvenido <b><?php echo $_SESSION['username_man'] ?></b></p></li>
+                    <li><p style="color: white;">Bienvenido <b><?php echo htmlspecialchars($_SESSION['username_man']) ?></b></p></li>
                 </div>
                 <li><a id="filtros" onclick="abrirFiltros()" href="#"><i class="fa-solid fa-magnifying-glass"></i> FILTROS</a></li>
                 <form style="display: none;" id="div-filtros" method="get">
@@ -81,7 +81,7 @@
                     foreach ($listado_estadisticas as $incidencias) {
                         echo "<tr>";
                         for ($i=0; $i < count($incidencias); $i++) { 
-                            echo "<td>".$incidencias[$i]."</td>";
+                            echo "<td>".htmlspecialchars((string) $incidencias[$i])."</td>";
                         }
                         echo "</tr>";
                     }
